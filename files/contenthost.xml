@@ -1,0 +1,46 @@
+<job retention_tag="scratch">
+  <whiteboard>ContentHostRHEL</whiteboard>
+  <recipeSet priority="High">
+    <recipe whiteboard="OS" role="None" ks_meta="" kernel_options="" kernel_options_post="">
+      <autopick random="false"/>
+      <watchdog panic="None"/>
+      <packages/>
+      <ks_appends/>
+      <repos/>
+      <distroRequires>
+        <and>
+          <distro_family op="=" value="RedHatEnterpriseLinux7"/>
+          <distro_variant op="=" value="Server"/>
+          <distro_name op="=" value="RHEL-7.6"/>
+          <distro_arch op="=" value="x86_64"/>
+        </and>
+      </distroRequires>
+      <hostRequires>
+        <and>
+          <system>
+            <and>
+              <arch value="x86_64" op="="/>
+              <memory value="4096" op="&gt;"/>
+              <memory value="9096" op="&lt;"/>
+            </and>
+          </system>
+          <or>
+            <disk>
+              <size units="GB" value="60" op="&gt;"/>
+            </disk>
+            <key_value key="DISKSPACE" value="60000" op="&gt;"/>
+          </or>
+          <key_value key="HVM" value="0" op="&gt;"/>
+        </and>
+        <system_type value="Machine"/>
+      </hostRequires>
+      <partitions/>
+      <task name="/distribution/check-install" role="STANDALONE"/>
+      <task name="/distribution/reservesys" role="STANDALONE">
+        <params>
+          <param name="RESERVETIME" value="356400"/>
+        </params>
+      </task>
+    </recipe>
+  </recipeSet>
+</job>
