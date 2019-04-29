@@ -35,8 +35,8 @@ def random_System(config, jenkins_job, content_host):
     """Reserve and provision any random system."""
 
     try:
-        Satellite=[]
-        ContentHost=[]
+        Satellite = []
+        ContentHost = []
         system = Client()
         jobid = system.randomSystem()
         joststatus = system.jobStatus(jobID=jobid)
@@ -73,7 +73,9 @@ def random_System(config, jenkins_job, content_host):
                         return echo_error('\n\t\t' + 'Something went wrong!!\n\n')
 
         echo_normal('\nSatellite hosts => ' + str(Satellite))
-        echo_normal('  Content hosts => ' + str(ContentHost))
+        if content_host:
+            echo_normal('  Content hosts => ' + str(ContentHost))
+
         sender.SendEmail(version=properties.jenkinsInstaller.satellite_version,
                          shost=Satellite,
                          chost=ContentHost)
@@ -155,13 +157,14 @@ def jenkins_installer(config, host):
         echo_error('\n\t\t'+'Something went wrong!!\n\n')
         echo_error(exp)
 
+
 @cli.command()
 @pass_config
 def content_host(config):
     """Reserve and provision content host."""
 
     try:
-        ContentHost=[]
+        ContentHost = []
         system = Client()
         jobid = system.contentHost()
         joststatus = system.jobStatus(jobID=jobid)

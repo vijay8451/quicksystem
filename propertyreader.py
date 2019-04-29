@@ -21,9 +21,6 @@ class RandomSystem(object):
     """random system reader"""
     def __init__(self):
         self.system_count = config.get('RandomSystem', 'system_count')
-        # self.system_ram = config.get('RandomSystem', 'system_ram')
-        # self.system_cpu = config.get('RandomSystem', 'system_cpu')
-        # self.system_distro = config.get('RandomSystem', 'system_distro')
 
 
 class Beaker(object):
