@@ -3,8 +3,7 @@
 This is a cli tool to reserve, provision a system on Beaker and use Jenkins job for Satellite .
 
 [Features](https://github.com/vijay8451/quicksystem#1-features) | [Installation and 
-Configuration](https://github.com/vijay8451/quicksystem#2-installtation) | [Examples]
-(https://github.com/vijay8451/quicksystem#3-examples) | [Version](https://github.com/vijay8451/quicksystem#5-version) | [License]()
+Configuration](https://github.com/vijay8451/quicksystem#2-installation-and-configuration) | [Examples](https://github.com/vijay8451/quicksystem#3-examples) | [Version](https://github.com/vijay8451/quicksystem#5-version) | [License]()
 
 ## 1. Features
  
