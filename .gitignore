@@ -13,7 +13,7 @@
 # Varies per-deployment.
 quicksystem.properties
 quicksystem.egg-info
-__pycache_/_
+__pycache__/
 
 
 # For Pycharm
