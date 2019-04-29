@@ -13,3 +13,4 @@ CLI tool to reserve, provision a system on Beaker and use Jenkins job for Satell
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## 5. Version
+[Version](https://github.com/vijay8451/quicksystem/blob/master/setup.py#L11)
