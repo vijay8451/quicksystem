@@ -16,12 +16,14 @@ Configuration](https://github.com/vijay8451/quicksystem#2-installation-and-confi
 
 ## 2. Installation and Configuration:
 
-Step 1: to Install:
+Step 1: Share your ssh key with Beaker: 1) Local account 2) Jenkins Installer job
+
+Step 2: to Install:
 ```bash
 # git clone https://github.com/vijay8451/quicksystem.git
 # sh setup.sh
 ```
-Step 2: Copy the `quicksystem.properties.sample` and put the values, for more details refer 
+Step 3: Copy the `quicksystem.properties.sample` and put the values, for more details refer 
 commented provided under `quicksystem.properties.sample`: 
 ```bash
 # cp quicksystem.properties.sample quicksystem.properties
