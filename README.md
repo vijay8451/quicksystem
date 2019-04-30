@@ -24,7 +24,7 @@ Step 2: to Install:
 # sh setup.sh
 ```
 Step 3: Copy the `quicksystem.properties.sample` and put the values, for more details refer 
-commented provided under `quicksystem.properties.sample`: 
+comments provided under `quicksystem.properties.sample`: 
 ```bash
 # cp quicksystem.properties.sample quicksystem.properties
 # vi quicksystem.properties
