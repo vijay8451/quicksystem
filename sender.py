@@ -9,21 +9,19 @@ properties = Properties()
 
 
 def SendEmail(version, chost=None, shost=None):
-    login_username = properties.mymail.login_mailid
-    login_password = properties.mymail.login_password
+    from_mail = properties.mymail.from_mail
     to_mail = properties.mymail.to_mail
-    msg = MIMEText('Hello Folks,'
+    msg = MIMEText('Hello,'
                    '\n\nHere are the systems details for the week ..\n'
                    '\nSatellite Host => {}\n'
-                   'Content Host => {}\n\n\n Thanks\nquicksystem Tool.'.format(shost, chost))
+                   'Hosts which could use as content host => {}\n\n\n Thanks\nquicksystem '
+                   'Tool.'.format(shost, chost))
 
     msg['To'] = email.utils.formataddr(('Recipient', to_mail))
-    msg['From'] = email.utils.formataddr(('Author', login_username))
+    msg['From'] = email.utils.formataddr(('quicksystem', from_mail))
     msg['Subject'] = '[{}] Systems for Bugzilla verification and Automation testing'.format(
         version)
 
-    s = smtplib.SMTP('smtp.gmail.com', 587)
-    s.starttls()
-    s.login(login_username, login_password)
-    s.sendmail(from_addr=login_username, to_addrs=to_mail, msg=msg.as_string())
-    s.quit()
+    smtpObj = smtplib.SMTP('localhost')
+    smtpObj.sendmail(from_mail, to_mail, msg=msg.as_string())
+    smtpObj.quit()

@@ -37,40 +37,46 @@ def random_System(config, jenkins_job, content_host):
     try:
         Satellite = []
         ContentHost = []
-        system = Client()
-        jobid = system.randomSystem()
-        joststatus = system.jobStatus(jobID=jobid)
 
-        if joststatus[0] == 'Running':
-            echo_normal('\n\t\t'+"System is reserved, Checking system connection..\n\n")
-            status = system.systemConnect(hostname=joststatus[1])
-            if status == "Up":
-                echo_success('\n\t\t'+joststatus[1] + " successfully provisioned!!\n\n")
-                Satellite.append('{}'.format(joststatus[1]))
-            else:
-                return echo_error('\n\t\t' + 'Something went wrong!!\n\n')
+        for _ in range(int(properties.randomSystem.system_count)):
+            system = Client()
+            jobid = system.randomSystem()
+            joststatus = system.jobStatus(jobID=jobid)
 
-            if status == "Up" and jenkins_job:
-                job = InstallerJob()
-                jobstatus = job.install(SERVER_HOSTNAME=joststatus[1])
-                if jobstatus == 'SUCCESS':
-                    echo_success('\n\t\t'+"Satellite installed successfully!!\n\n")
+            if joststatus[0] == 'Running':
+                echo_normal('\n\t\t' + "System is reserved, Checking system connection..\n\n")
+                status = system.systemConnect(hostname=joststatus[1])
+                if status == "Up":
+                    echo_success('\n\t\t' + joststatus[1] + " successfully provisioned!!\n\n")
+                    Satellite.append('{}'.format(joststatus[1]))
                 else:
-                    return echo_error('\n\t\t'+'Something went wrong!!\n\n')
+                    return echo_error('\n\t\t' + 'Something went wrong!!\n\n')
 
-            if status == "Up" and content_host:
-                system = Client()
-                jobid = system.contentHost()
-                joststatus = system.jobStatus(jobID=jobid)
-
-                if joststatus[0] == 'Running':
-                    echo_normal('\n\t\t' + "System is reserved, Checking system connection..\n\n")
-                    status = system.systemConnect(hostname=joststatus[1])
-                    if status == "Up":
-                        echo_success('\n\t\t' + joststatus[1] + " successfully provisioned!!\n\n")
-                        ContentHost.append('{}'.format(joststatus[1]))
+                if status == "Up" and jenkins_job:
+                    job = InstallerJob()
+                    jobstatus = job.install(SERVER_HOSTNAME=joststatus[1])
+                    if jobstatus == 'SUCCESS':
+                        echo_success('\n\t\t' + "Satellite installed successfully!!\n\n")
                     else:
                         return echo_error('\n\t\t' + 'Something went wrong!!\n\n')
+
+                if status == "Up" and content_host and \
+                        len(ContentHost) < int(properties.randomSystem.system_count):
+                    for _ in range(int(properties.contentHost.host_count)):
+                        system = Client()
+                        jobid = system.contentHost()
+                        joststatus = system.jobStatus(jobID=jobid)
+
+                        if joststatus[0] == 'Running':
+                            echo_normal(
+                                '\n\t\t' + "System is reserved, Checking system connection..\n\n")
+                            status = system.systemConnect(hostname=joststatus[1])
+                            if status == "Up":
+                                echo_success(
+                                    '\n\t\t' + joststatus[1] + " successfully provisioned!!\n\n")
+                                ContentHost.append('{}'.format(joststatus[1]))
+                            else:
+                                return echo_error('\n\t\t' + 'Something went wrong!!\n\n')
 
         echo_normal('\nSatellite hosts => ' + str(Satellite))
         if content_host:
@@ -165,16 +171,19 @@ def content_host(config):
 
     try:
         ContentHost = []
-        system = Client()
-        jobid = system.contentHost()
-        joststatus = system.jobStatus(jobID=jobid)
 
-        if joststatus[0] == 'Running':
-            echo_normal('\n\t\t' + "System is reserved, Checking system connection..\n\n")
-            status = system.systemConnect(hostname=joststatus[1])
-            if status == "Up":
-                echo_success('\n\t\t' + joststatus[1] + " successfully provisioned!!\n\n")
-                ContentHost.append('{}'.format(joststatus[1]))
+        for _ in range(int(properties.contentHost.host_count)):
+            system = Client()
+            jobid = system.contentHost()
+            joststatus = system.jobStatus(jobID=jobid)
+
+            if joststatus[0] == 'Running':
+                echo_normal('\n\t\t' + "System is reserved, Checking system connection..\n\n")
+                status = system.systemConnect(hostname=joststatus[1])
+                if status == "Up":
+                    echo_success('\n\t\t' + joststatus[1] + " successfully provisioned!!\n\n")
+                    ContentHost.append('{}'.format(joststatus[1]))
+
         echo_normal('\n  Content hosts => ' + str(ContentHost))
 
     except Exception as exp:

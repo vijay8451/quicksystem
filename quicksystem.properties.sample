@@ -1,6 +1,9 @@
+# Make a copy of this file as quicksystem.properties
+# and remove the hints from all section lines and provide the correct values to work error free
+
 [Beaker]
 krb_username=                            ## kerberos username
-krb_password=                            ## kerberos password 
+krb_password=                            ## kerberos password
 beaker_url=                              ## Beaker host URL
 env_host_string=localhost                ## localhost
 env_username=                            ## Username to login at localsystem
@@ -10,9 +13,8 @@ env_password=                            ## Password to login at localsystem
 host_count=1                             ## number of content hosts required
 
 [Emails]
-login_mailid=                            ## Your's mailID
-login_password=                          ## Your's mailID password
-to_mail=                                 ## wanna to send email
+from_mail                                ## Sender mail ID
+to_mail=                                 ## Receiver mail ID
 
 [JenkinsInstaller]
 jenkins_url=                             ## Jenkins host URL

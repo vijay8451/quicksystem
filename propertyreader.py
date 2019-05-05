@@ -61,9 +61,8 @@ class ContentHost(object):
 class Mymail(object):
     """Email reader"""
     def __init__(self):
-        self.login_mailid = config.get('Emails', 'login_mailid')
-        self.login_password = config.get('Emails', 'login_password')
         self.to_mail = config.get('Emails', 'to_mail')
+        self.from_mail = config.get('Emails', 'from_mail')
 
 
 class LogsLevel(object):
