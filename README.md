@@ -16,7 +16,12 @@ Configuration](https://github.com/vijay8451/quicksystem#2-installation-and-confi
 
 ## 2. Installation and Configuration:
 
-Step 1: Share your ssh key with Beaker: 1) Local account 2) Jenkins Installer job
+Step 1: Prerequisites
+```
+a. Install Python 3.6 and Pip3.
+b. Setup Beaker Client.
+c. Share ssh key of Local account and Jenkins Installer job with Beaker.
+```
 
 Step 2: to Install:
 ```bash
@@ -58,7 +63,12 @@ Commands:
   setup-client       Setup beaker client.
   thesystem          Provision a already reserved system.
 
-``` 
+```
+
+ * Setup beaker client:
+ ```bash
+# quicksystem setup-client
+```
  * Reserve and provision any random system for Satellite:
  ```bash
 # quicksystem random-system
@@ -90,10 +100,6 @@ Options:
   --help              Show this message and exit.
 
 # quicksystem thesystem --jenkins-job True
-```
- * Setup beaker client:
- ```bash
-# quicksystem setup-client
 ```
 ## 4. License
 [MIT](https://choosealicense.com/licenses/mit/)
