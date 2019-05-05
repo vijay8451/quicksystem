@@ -54,7 +54,11 @@ def random_System(config, jenkins_job, content_host):
 
                 if status == "Up" and jenkins_job:
                     job = InstallerJob()
-                    jobstatus = job.install(SERVER_HOSTNAME=joststatus[1])
+                    jobstatus = job.install(
+                        SERVER_HOSTNAME=joststatus[1],
+                        SATELLITE_DISTRIBUTION=properties.jenkinsInstaller.satellite_distribution,
+                        SATELLITE_VERSION=properties.jenkinsInstaller.satellite_version,
+                        SETUP_FAKE_MANIFEST_CERTIFICATE=properties.jenkinsInstaller.setup_fake_manifest_certificate,)
                     if jobstatus == 'SUCCESS':
                         echo_success('\n\t\t' + "Satellite installed successfully!!\n\n")
                     else:
@@ -115,8 +119,7 @@ def theSystem(config, jenkins_job):
                     SERVER_HOSTNAME=config.host,
                     SATELLITE_DISTRIBUTION=properties.jenkinsInstaller.satellite_distribution,
                     SATELLITE_VERSION=properties.jenkinsInstaller.satellite_version,
-                    SETUP_FAKE_MANIFEST_CERTIFICATE=properties.jenkinsInstaller.setup_fake_manifest_certificate,
-                )
+                    SETUP_FAKE_MANIFEST_CERTIFICATE=properties.jenkinsInstaller.setup_fake_manifest_certificate,)
                 if jobstatus == 'SUCCESS':
                     echo_success('\n\t\t'+"Satellite installed successfully!!\n\n")
                 else:
@@ -153,7 +156,11 @@ def jenkins_installer(config, host):
     """ Install Satellite using Jenkins installer job. """
     try:
         job = InstallerJob()
-        jobstatus = job.install(SERVER_HOSTNAME=host)
+        jobstatus = job.install(
+            SERVER_HOSTNAME=host,
+            SATELLITE_DISTRIBUTION=properties.jenkinsInstaller.satellite_distribution,
+            SATELLITE_VERSION=properties.jenkinsInstaller.satellite_version,
+            SETUP_FAKE_MANIFEST_CERTIFICATE=properties.jenkinsInstaller.setup_fake_manifest_certificate,)
         if jobstatus == 'SUCCESS':
             echo_success('\n\t\t'+"Satellite installed successfully!!\n\n")
         else:
