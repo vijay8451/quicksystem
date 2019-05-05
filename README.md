@@ -3,8 +3,7 @@
 This is a cli tool to reserve, provision a system on Beaker and use Jenkins job for Satellite .
 
 [Features](https://github.com/vijay8451/quicksystem#1-features) | [Installation and 
-Configuration](https://github.com/vijay8451/quicksystem#2-installtation) | [Examples]
-(https://github.com/vijay8451/quicksystem#3-examples) | [Version](https://github.com/vijay8451/quicksystem#5-version) | [License]()
+Configuration](https://github.com/vijay8451/quicksystem#2-installation-and-configuration) | [Examples](https://github.com/vijay8451/quicksystem#3-examples) | [Version](https://github.com/vijay8451/quicksystem#5-version) | [License]()
 
 ## 1. Features
  
@@ -17,13 +16,20 @@ Configuration](https://github.com/vijay8451/quicksystem#2-installtation) | [Exam
 
 ## 2. Installation and Configuration:
 
-Step 1: to Install:
+Step 1: Prerequisites
+```
+a. Install Python 3.6 and Pip3.
+b. Setup Beaker Client.
+c. Share ssh key of Local account and Jenkins Installer job with Beaker.
+```
+
+Step 2: to Install:
 ```bash
 # git clone https://github.com/vijay8451/quicksystem.git
 # sh setup.sh
 ```
-Step 2: Copy the `quicksystem.properties.sample` and put the values, for more details refer 
-commented provided under `quicksystem.properties.sample`: 
+Step 3: Copy the `quicksystem.properties.sample` and put the values, for more details refer 
+comments provided under `quicksystem.properties.sample`: 
 ```bash
 # cp quicksystem.properties.sample quicksystem.properties
 # vi quicksystem.properties
@@ -57,7 +63,12 @@ Commands:
   setup-client       Setup beaker client.
   thesystem          Provision a already reserved system.
 
-``` 
+```
+
+ * Setup beaker client:
+ ```bash
+# quicksystem setup-client
+```
  * Reserve and provision any random system for Satellite:
  ```bash
 # quicksystem random-system
@@ -89,10 +100,6 @@ Options:
   --help              Show this message and exit.
 
 # quicksystem thesystem --jenkins-job True
-```
- * Setup beaker client:
- ```bash
-# quicksystem setup-client
 ```
 ## 4. License
 [MIT](https://choosealicense.com/licenses/mit/)
