@@ -1,18 +1,18 @@
 # quicksystem
 
-This is a cli tool to reserve, provision a system on Beaker and use Jenkins job for Satellite .
+This is a cli tool to reserve, provision a system and use Jenkins job to install Satellite.
 
 [Features](https://github.com/vijay8451/quicksystem#1-features) | [Installation and 
 Configuration](https://github.com/vijay8451/quicksystem#2-installation-and-configuration) | [Examples](https://github.com/vijay8451/quicksystem#3-examples) | [Version](https://github.com/vijay8451/quicksystem#5-version) | [License]()
 
 ## 1. Features
  
- * Reserve and provision any random system over Beaker for Satellite and Content Host.
+ * Reserve and provision any random system for Satellite and Content Host.
  * Re-provision a already reserved system .
  * Install Satellite using Jenkins installer job .
  * Install Satellite on already reserved system .
  * Setup Beaker client .
- * Send report over email for Satellite and Content host.
+ * Send report over email of Satellite and Content host.
 
 ## 2. Installation and Configuration:
 

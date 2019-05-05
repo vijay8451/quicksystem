@@ -13,7 +13,7 @@ env_password=                            ## Password to login at localsystem
 host_count=1                             ## number of content hosts required
 
 [Emails]
-from_mail                                ## Sender mail ID
+from_mail=                               ## Sender mail ID
 to_mail=                                 ## Receiver mail ID
 
 [JenkinsInstaller]
