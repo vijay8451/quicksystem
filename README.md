@@ -16,7 +16,7 @@ Configuration](https://github.com/vijay8451/quicksystem#2-installation-and-confi
 
 ## 2. Installation and Configuration:
 
-Step 1: Prerequisites
+Step 1: Prerequisites 
 ```
 a. Install Python 3.6 and Pip3.
 b. Setup Beaker Client.
