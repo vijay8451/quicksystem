@@ -18,7 +18,7 @@ Configuration](https://github.com/vijay8451/quicksystem#2-installation-and-confi
 
 Step 1: Prerequisites 
 ```
-a. Install Python 3.6 and Pip3.
+a. Install Python 3.12 or later and Pip3.
 b. Setup Beaker Client.
 c. Share ssh key of Local account and Jenkins Installer job with Beaker.
 ```
@@ -37,7 +37,7 @@ comments provided under `quicksystem.properties.sample`:
 or using separate virtual env:
 
 ```bash
-# python36 -m venv < myenv >
+# python3 -m venv < myenv >
 # source < myenv >/bin/active
 # git clone https://github.com/vijay8451/quicksystem.git
 # sh setup.sh

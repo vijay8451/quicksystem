@@ -14,7 +14,7 @@ setup(
     long_description_content_type='text/markdown',
     author="Vijay Singh",
     author_email="vijay8451@gmail.com",
-    python_requires=">=3.6",
+    python_requires=">=3.12",
     url="https://github.com/vijay8451/quicksystem",
     py_modules=['quicksystem'],
     install_requires=required,
@@ -23,6 +23,6 @@ setup(
     license='MIT',
     classifiers=[
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.12',
     ],
 )
