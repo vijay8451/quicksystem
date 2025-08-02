@@ -1,9 +1,9 @@
 import logging
 import os
 import time
-import fabric
 import warnings
-from fabric.api import env, run
+from fabric import Connection
+from invoke import run as local_run
 from wait_for import wait_for
 from propertyreader import Properties
 
@@ -32,78 +32,78 @@ class Client(object):
         self.password = properties.beaker.password
         self.hub = properties.beaker.hub
         self.logger = logging.getLogger('system')
-        env.host_string = properties.beaker.env_host_string
-        env.user = properties.beaker.env_username
-        env.password = properties.beaker.env_password
-        env.output_prefix = True
-        fabric.state.output['running'] = True if properties.logslevel.level == 'DEBUG' else False
-        fabric.state.output['output'] = True if properties.logslevel.level == 'DEBUG' else False
+        self.connection = Connection(
+            host=properties.beaker.env_host_string,
+            user=properties.beaker.env_username,
+            connect_kwargs={"password": properties.beaker.env_password}
+        )
+        self.hide_output = properties.logslevel.level != 'DEBUG'
 
     def setupBkrClient(self):
         command = "/usr/bin/bkr whoami;date"
-        job = run(command, shell=False)
+        job = self.connection.run(command, hide=self.hide_output)
 
-        if job.count("username") == 1:
+        if job.stdout.count("username") == 1:
             logging.info("Beaker client already configured!")
-            return job.count("username")
+            return job.stdout.count("username")
         else:
-            myid = run("id -u", shell=False)
-            if int(myid) == 0:
-                run("echo -e '"
+            myid = self.connection.run("id -u", hide=self.hide_output)
+            if int(myid.stdout) == 0:
+                self.connection.run("echo -e '"
                     "[beaker]\n"
                     "name=Beaker\n"
                     "baseurl='http://download.eng.bos.redhat.com/beakerrepos/client"
                     "/RedHatEnterpriseLinux7Client'\n"
                     "enabled=1\n"
                     "gpgcheck=0'>/etc/yum.repos.d/beaker_client.repo",
-                    shell=False)
+                    hide=self.hide_output)
 
                 config_auth = 'AUTH_METHOD="password"'
                 config_username = 'USERNAME="{}"'.format(self.username)
                 config_password = 'PASSWORD="{}"'.format(self.password)
                 config_hub = 'HUB_URL="{}"'.format(self.hub)
-                run("mkdir ~/.beaker_client; echo -e '{}\n{}\n{}\n{}\n'> ~/.beaker_client/config"
+                self.connection.run("mkdir ~/.beaker_client; echo -e '{}\n{}\n{}\n{}\n'> ~/.beaker_client/config"
                     .format(config_hub, config_auth, config_username, config_password),
-                    shell=False)
+                    hide=self.hide_output)
 
-                run("subscription-manager repos --enable=rhel-7-server-optional-rpms &&"
+                self.connection.run("subscription-manager repos --enable=rhel-7-server-optional-rpms &&"
                     "yum clean all && yum install -y rhts-devel beaker{,lib}-redhat nmap-ncat",
-                    shell=False)
+                    hide=self.hide_output)
 
-                job = run(command, shell=False)
-                if job.count("username") == 1:
+                job = self.connection.run(command, hide=self.hide_output)
+                if job.stdout.count("username") == 1:
                     logging.info("Beaker client has been configured!")
-                    return job.count("username")
+                    return job.stdout.count("username")
                 else:
                     logging.error(
                         "Beaker client setup failed!, please check manually or try again.")
             else:
-                return int(myid)
+                return int(myid.stdout)
 
     def randomSystem(self):
 
         filepath = os.getcwd()+'/files/system.xml'
-        job = run("/usr/bin/bkr job-submit --xml {}".format(filepath), shell=False)
-        location = job.find('Submitted')
+        job = self.connection.run("/usr/bin/bkr job-submit --xml {}".format(filepath), hide=self.hide_output)
+        location = job.stdout.find('Submitted')
 
-        if job.succeeded:
-            logging.info("Job {} has been submitted".format(job[location::].rsplit()[1][2:-2]))
-            return job[location::].rsplit()[1][2:-2]
+        if job.ok:
+            logging.info("Job {} has been submitted".format(job.stdout[location::].rsplit()[1][2:-2]))
+            return job.stdout[location::].rsplit()[1][2:-2]
 
     def theSystem(self, hostname, distrotree):
 
-        job = run("/usr/bin/bkr system-provision --distro-tree={} {} "
-                  .format(distrotree, hostname), shell=False)
+        job = self.connection.run("/usr/bin/bkr system-provision --distro-tree={} {} "
+                  .format(distrotree, hostname), hide=self.hide_output)
 
-        if job.succeeded:
+        if job.ok:
             logging.info("Provision job has been submitted to beaker.")
 
             return "Submitted"
 
     def _checkSSH(self, hostname):
 
-        job = run("echo 'QUIT'| nc -v {} 22 -w 5;date".format(hostname), shell=False)
-        count = job.count('Connected to')
+        job = self.connection.run("echo 'QUIT'| nc -v {} 22 -w 5;date".format(hostname), hide=self.hide_output)
+        count = job.stdout.count('Connected to')
         logging.info("Still awaiting to reachable on SSH Port.")
         return count
 
@@ -127,16 +127,16 @@ class Client(object):
     def _cstatus(self, jobID):
         rstatus = None
         hostname = None
-        jobcheck = run("/usr/bin/bkr job-results {}".format(jobID), shell=False)
+        jobcheck = self.connection.run("/usr/bin/bkr job-results {}".format(jobID), hide=self.hide_output)
         logging.info("This may take sometime, awaiting system to build ..")
 
-        if 'system value=' in jobcheck:
-            istart = jobcheck.find('system value=')
-            iend = jobcheck.find('/></role></roles><repos/><distroRequires>')
-            hostname = jobcheck[istart:iend].split('=')[1].split('"')[1]
+        if 'system value=' in jobcheck.stdout:
+            istart = jobcheck.stdout.find('system value=')
+            iend = jobcheck.stdout.find('/></role></roles><repos/><distroRequires>')
+            hostname = jobcheck.stdout[istart:iend].split('=')[1].split('"')[1]
 
         for status in ['Cancelled', 'Running']:
-            if status in jobcheck:
+            if status in jobcheck.stdout:
                 rstatus = status
 
         return [rstatus, hostname]
@@ -156,9 +156,9 @@ class Client(object):
     def contentHost(self):
 
         filepath = os.getcwd()+'/files/contenthost.xml'
-        job = run("/usr/bin/bkr job-submit --xml {}".format(filepath), shell=False)
-        location = job.find('Submitted')
+        job = self.connection.run("/usr/bin/bkr job-submit --xml {}".format(filepath), hide=self.hide_output)
+        location = job.stdout.find('Submitted')
 
-        if job.succeeded:
-            logging.info("Job {} has been submitted".format(job[location::].rsplit()[1][2:-2]))
-            return job[location::].rsplit()[1][2:-2]
+        if job.ok:
+            logging.info("Job {} has been submitted".format(job.stdout[location::].rsplit()[1][2:-2]))
+            return job.stdout[location::].rsplit()[1][2:-2]
